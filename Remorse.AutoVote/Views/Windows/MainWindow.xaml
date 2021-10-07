@@ -1,0 +1,143 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Remorse.AutoVote.ViewModels"
+    xmlns:fa="http://schemas.fontawesome.io/icons/"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:Remorse.AutoVote"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d" 
+    x:Class="Remorse.AutoVote.Views.Windows.MainWindow"
+    Title="Remorse AutoVote" WindowStyle="None" Height="500" Width="900"  WindowStartupLocation="CenterScreen" 
+    ResizeMode="NoResize" MouseMove="Window_onMouseMove" AllowsTransparency="True" Background="Transparent">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+    <Border CornerRadius="1" BorderThickness="1" BorderBrush="#AC403B08" Background="#00000000">
+        <Grid>
+            <Grid.Background>
+                <ImageBrush ImageSource="../../Resources/background.png" Stretch="None"/>
+            </Grid.Background>
+            <DockPanel Panel.ZIndex="3">
+                <Polygon Points="43,100 46,90 92,45 107,45 156,94 156,108 107,156 91,156 45,110" Margin="{Binding BtnSlideMenuMargin}" Cursor="Hand">
+                    <Polygon.Fill>
+                        <ImageBrush ImageSource="../../Resources/MenuSlide.png"/>
+                    </Polygon.Fill>
+                    <Polygon.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding SlideMenuCommand}"/>
+                    </Polygon.InputBindings>
+                </Polygon>
+            </DockPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding TabMenuWidth}"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid Panel.ZIndex="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="114"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="../../Resources/Menu.png"/>
+                    </Grid.Background>
+                    <Image Height="114" Width="250" Source="../../Resources/logo.png" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ListBox x:Name="MenuSlide" Grid.Row="1" SelectedIndex="{Binding SelectedMenuIndex}">
+                        <Border Height="45" Cursor="Hand" Margin="-8" Width="250" CornerRadius="4" BorderBrush="#AC23401D" BorderThickness="1">
+                            <DockPanel>
+                                <fa:ImageAwesome Icon="ThumbsUp" Height="20" Foreground="Silver" Margin="44,0,19,0"/>
+                                <TextBlock Text="Голосовать" Foreground="Silver" FontSize="14" FontWeight="SemiBold" Margin="-84,0,0,0" Padding="84,12"/>
+                            </DockPanel>
+                        </Border>
+                        <Border Height="45" Cursor="Hand" Margin="-8" Width="250" CornerRadius="4" BorderBrush="#AC23401D" BorderThickness="1">
+                            <DockPanel>
+                                <fa:ImageAwesome Icon="User" Height="20" Foreground="Silver" Margin="44,0,23,0"/>
+                                <TextBlock Text="Профиль" Foreground="Silver" FontSize="14" FontWeight="SemiBold" Margin="-84,0,0,0" Padding="84,12"/>
+                            </DockPanel>
+                        </Border>
+                        <Border Height="45" Cursor="Hand" Margin="-8" Width="250" CornerRadius="4" BorderBrush="#AC23401D" BorderThickness="1">
+                            <DockPanel>
+                                <fa:ImageAwesome Icon="Cog" Height="20" Foreground="Silver" Margin="44,0,20,0"/>
+                                <TextBlock Text="Настройки" Foreground="Silver" FontSize="14" FontWeight="SemiBold" Margin="-84,0,0,0" Padding="84,12"/>
+                            </DockPanel>
+                        </Border>
+                        <Border Height="45" Cursor="Hand" Margin="-8" Width="250" CornerRadius="4" BorderBrush="#AC23401D" BorderThickness="1">
+                            <DockPanel>
+                                <fa:ImageAwesome Icon="InfoCircle" Height="20" Foreground="Silver" Margin="44,0,20,0"/>
+                                <TextBlock Text="Помощь" Foreground="Silver" FontSize="14" FontWeight="SemiBold" Margin="-84,0,0,0" Padding="84,12"/>
+                            </DockPanel>
+                        </Border>
+                        <Button Height="45" Cursor="Hand" Command="{Binding CloseApplicationCommand}" Margin="-8" Width="250" Background="Transparent" BorderBrush="#AC23401D" BorderThickness="1" HorizontalContentAlignment="Left">
+                            <DockPanel>
+                                <fa:ImageAwesome Icon="PowerOff" Height="20" Foreground="Silver" Margin="30,0,21,0"/>
+                                <TextBlock Text="Выйти" Foreground="Silver" FontSize="14" FontWeight="SemiBold"/>
+                            </DockPanel>
+                        </Button>
+                    </ListBox>
+                </Grid>
+                <TabControl x:Name="Menu" SelectedIndex="{Binding SelectedMenuIndex}" TabStripPlacement="Left" Grid.Column="1" Margin="-80,0,0,0" BorderThickness="0" Background="Transparent">
+                    <TabItem Header="Голосовать">
+                        <Grid>
+                            <TextBlock Text="Голосуй за проект и получай бонусы" VerticalAlignment="Top" Height="107" Foreground="#FFDAB845" FontSize="24" FontFamily="Wide Latin" FontWeight="Bold" TextAlignment="Center" Padding="0,38,0,0"/>
+                            <ListBox ItemsSource="{Binding Projects}" Style="{DynamicResource ListBoxProjects}">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="30,30,0,0">
+                                            <Image Source="{Binding Logo}" ToolTip="{Binding Title}" Style="{DynamicResource ImageProjects}">
+                                                <Image.InputBindings>
+                                                    <MouseBinding MouseAction="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext.SelectProjectCommand}" CommandParameter="{Binding}"/>
+                                                </Image.InputBindings>
+                                            </Image>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Профиль">
+                        <Grid>
+                            <Grid x:Name="VkDialog" Visibility="{Binding VkDialogVisibility}">
+                                <Image HorizontalAlignment="Center" Height="116"  VerticalAlignment="Center" Width="200" Source="../../Resources/VKAuth.png" Margin="215,161,216,219" Stretch="Fill"/>
+                                <Button Command="{Binding VkAuthCommand}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="234,210,235,202" Width="180" Height="30" Background="Transparent" BorderThickness="0" Grid.Row="1"/>
+                            </Grid>
+                            <Grid x:Name="Profile" Visibility="{Binding ProfileVisibility, Mode=TwoWay}">
+                                <Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="20"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="50" Height="50" CornerRadius="25" Cursor="Hand">
+                                        <Border.Background>
+                                            <ImageBrush x:Name="ProfileImage" ImageSource="../../Resources/MeImage.png"/>
+                                        </Border.Background>
+                                        <Border.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick" Command="{Binding OpenVkProfileCommand}"/>
+                                        </Border.InputBindings>
+                                    </Border>
+                                    <TextBlock x:Name="ProfileName" Grid.Column="1" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" Margin="20,0,10,15" Text="Unknown User"/>
+                                    <Button Command="{Binding VkLeaveCommand}" Content="Выйти" Grid.Column="1" Foreground="#FFDEDB92" Background="#05FFFFFF" BorderThickness="0" Height="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5,0,0,5"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Настройки">
+                        <Grid>
+                            <Button Content="Сбросить настройки" Width="200" Command="{Binding ResetSettingsCommand}"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Помощь">
+                        <Grid/>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
